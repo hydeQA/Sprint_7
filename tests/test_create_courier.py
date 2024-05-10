@@ -17,7 +17,7 @@ class TestCreateCourier:                                # Тесты на endpoi
     @allure.title("Проверка появления ошибки при создании двух одинаковых курьеров")
     @allure.description("Создание двух одинаковых курьеров, проверка статуса ответа и тела ответа")
     def test_create_duplicate_courier(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)               # создали первого курьера с body
         duplicate_courier_request = scooter_api.create_courier(body)                    # создали второго курьера с body
         login_body = body.copy()
@@ -57,7 +57,7 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка успешной авторизации курьера")
     @allure.description("Создание курьера и его авторизация, проверка статуса ответа и наличия id курьера в ответе")
     def test_success_login(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         id_courier = courier_login.json().get("id")
@@ -68,7 +68,7 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка появления ошибки при авторизации курьера с неверным полем login")
     @allure.description("Создание курьера и его авторизация с неверным полем login, проверка статуса ответа с ошибкой и теста ошибки в ответе")
     def test_fail_with_wrong_login(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)
         body["login"] = "Courier"
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
@@ -80,7 +80,7 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка появления ошибки при авторизации курьера с неверным полем password")
     @allure.description("Создание курьера и его авторизация с неверным полем password, проверка статуса ответа с ошибкой и теrста ошибки в ответе")
     def test_fail_with_wrong_password(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)
         body["password"] = "54321"
         courier_password = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
@@ -92,7 +92,7 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка появления ошибки при авторизации курьера с пустым полем login")
     @allure.description("Создание курьера и его авторизация с пустым полем login, проверка статуса ответа с ошибкой и теста ошибки в ответе")
     def test_fail_with_empty_login(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)
         body["login"] = ""
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
@@ -104,7 +104,7 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка появления ошибки при авторизации курьера с пустым полем password")
     @allure.description("Создание курьера и его авторизация с пустым полем password, проверка статуса ответа с ошибкой и теrста ошибки в ответе")
     def test_fail_with_wrong_password(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         requests.post(urls.BASE_URL + urls.CREATE_COURIER_ENDPOINT, body)
         body["password"] = ""
         courier_password = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
@@ -116,6 +116,6 @@ class TestLoginCourier:                                # Тесты на endpoin
     @allure.title("Проверка невозможности авторизации несуществующего курьера")
     @allure.description("Авторизация несуществующего курьера, проверка статуса ответа и текста ошибки")
     def test_success_login(self):
-        body = data.register_new_courier_and_return_login_password()
+        body = helper.new_courier_login_password()
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         assert courier_login.status_code == 404 and courier_login.json()["message"] == "Учетная запись не найдена"
