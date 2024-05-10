@@ -24,7 +24,7 @@ class TestCreateCourier:                                # Тесты на endpoi
         login_body.pop("firstName", None)
         id_courier = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=login_body).json().get("id")
         requests.delete(urls.BASE_URL + urls.DELETE_COURIER_ENDPOINT + str(id_courier))
-        assert duplicate_courier_request.status_code == 409 and duplicate_courier_request.json()["message"] == "Этот логин уже используется"
+        assert duplicate_courier_request.status_code == 409 and duplicate_courier_request.json()["message"] == data.ErrorMessages.ERROR_MESSAGE_FAIL_NAME
 
 
     @allure.title("Проверка появления ошибки при создании курьера с пустым полем 'login'")
@@ -32,7 +32,7 @@ class TestCreateCourier:                                # Тесты на endpoi
     def test_empty_login_create_courier(self):
         body_login = helper.ChangeTestDataHelper.modify_create_courier_body("login", "")
         empty_login_courier_request = scooter_api.create_courier(body_login)
-        assert empty_login_courier_request.status_code == 400 and empty_login_courier_request.json()["message"] == "Недостаточно данных для создания учетной записи"
+        assert empty_login_courier_request.status_code == 400 and empty_login_courier_request.json()["message"] == data.ErrorMessages.ERROR_NOT_ENOUGH_DATA
 
 
     @allure.title("Проверка появления ошибки при создании курьера с пустым полем 'password'")
@@ -41,7 +41,7 @@ class TestCreateCourier:                                # Тесты на endpoi
         body_pass = helper.ChangeTestDataHelper.modify_create_courier_body("password", "")
         empty_password_courier_request = scooter_api.create_courier(body_pass)
         assert empty_password_courier_request.status_code == 400 and empty_password_courier_request.json()[
-            "message"] == "Недостаточно данных для создания учетной записи"
+            "message"] == data.ErrorMessages.ERROR_NOT_ENOUGH_DATA
 
 
     @allure.title("Проверка появления ошибки при создании курьера с пустым полем 'firstname'")
@@ -50,7 +50,7 @@ class TestCreateCourier:                                # Тесты на endpoi
         body_firstname = helper.ChangeTestDataHelper.modify_create_courier_body("firstname", "")
         empty_firstname_courier_request = scooter_api.create_courier(body_firstname)
         assert empty_firstname_courier_request.status_code == 400 and empty_firstname_courier_request.json()[
-            "message"] == "Недостаточно данных для создания учетной записи"
+            "message"] == data.ErrorMessages.ERROR_NOT_ENOUGH_DATA
 
 
 class TestLoginCourier:                                # Тесты на endpoint «Авторизация курьера»
@@ -74,7 +74,7 @@ class TestLoginCourier:                                # Тесты на endpoin
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         id_courier = courier_login.json().get("id")
         requests.delete(urls.BASE_URL + urls.DELETE_COURIER_ENDPOINT + str(id_courier))
-        assert courier_login.status_code == 404 and courier_login.json()["message"] == "Учетная запись не найдена"
+        assert courier_login.status_code == 404 and courier_login.json()["message"] == data.ErrorMessages.ERROR_NOT_FOUND
 
 
     @allure.title("Проверка появления ошибки при авторизации курьера с неверным полем password")
@@ -86,7 +86,7 @@ class TestLoginCourier:                                # Тесты на endpoin
         courier_password = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         id_courier = courier_password.json().get("id")
         requests.delete(urls.BASE_URL + urls.DELETE_COURIER_ENDPOINT + str(id_courier))
-        assert courier_password.status_code == 404 and courier_password.json()["message"] == "Учетная запись не найдена"
+        assert courier_password.status_code == 404 and courier_password.json()["message"] == data.ErrorMessages.ERROR_NOT_FOUND
 
 
     @allure.title("Проверка появления ошибки при авторизации курьера с пустым полем login")
@@ -98,7 +98,7 @@ class TestLoginCourier:                                # Тесты на endpoin
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         id_courier = courier_login.json().get("id")
         requests.delete(urls.BASE_URL + urls.DELETE_COURIER_ENDPOINT + str(id_courier))
-        assert courier_login.status_code == 400 and courier_login.json()["message"] == "Недостаточно данных для входа"
+        assert courier_login.status_code == 400 and courier_login.json()["message"] == data.ErrorMessages.ERROR_NOT_ENOUGH_LOGIN_DATA
 
 
     @allure.title("Проверка появления ошибки при авторизации курьера с пустым полем password")
@@ -110,7 +110,7 @@ class TestLoginCourier:                                # Тесты на endpoin
         courier_password = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
         id_courier = courier_password.json().get("id")
         requests.delete(urls.BASE_URL + urls.DELETE_COURIER_ENDPOINT + str(id_courier))
-        assert courier_password.status_code == 400 and courier_password.json()["message"] == "Недостаточно данных для входа"
+        assert courier_password.status_code == 400 and courier_password.json()["message"] == data.ErrorMessages.ERROR_NOT_ENOUGH_LOGIN_DATA
 
 
     @allure.title("Проверка невозможности авторизации несуществующего курьера")
@@ -118,4 +118,4 @@ class TestLoginCourier:                                # Тесты на endpoin
     def test_success_login(self):
         body = helper.new_courier_login_password()
         courier_login = requests.post(urls.BASE_URL + urls.LOGIN_COURIER_ENDPOINT, json=body)
-        assert courier_login.status_code == 404 and courier_login.json()["message"] == "Учетная запись не найдена"
+        assert courier_login.status_code == 404 and courier_login.json()["message"] == data.ErrorMessages.ERROR_NOT_FOUND

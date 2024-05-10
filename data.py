@@ -10,3 +10,9 @@ class TestDataCreatingOrder:
         "comment": "Saske, come back to Konoha",
         "color": ["BLACK"]
     }
+
+class ErrorMessages:
+    ERROR_MESSAGE_FAIL_NAME = "Этот логин уже используется"
+    ERROR_NOT_ENOUGH_DATA = "Недостаточно данных для создания учетной записи"
+    ERROR_NOT_FOUND = "Учетная запись не найдена"
+    ERROR_NOT_ENOUGH_LOGIN_DATA = "Недостаточно данных для входа"
